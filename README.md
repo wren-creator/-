@@ -1,3 +1,5 @@
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 # LLM Validator
 
 A model-agnostic CLI tool for **investigating, validating, and auditing** language models.
