@@ -25,8 +25,10 @@ def run(
     suite: Path = typer.Argument(..., help="Path to YAML/JSON test suite file"),
     model: Optional[str] = typer.Option(None, "--model", "-m", help="Override the model specified in the suite"),
     output: Optional[Path] = typer.Option(None, "--output", "-o", help="Write detailed log to a JSON file"),
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show full model responses in terminal"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show full prompts and responses for every test"),
     fail_fast: bool = typer.Option(False, "--fail-fast", help="Stop on first test failure"),
+    tags: Optional[str] = typer.Option(None, "--tags", "-t", help="Comma-separated tags to filter tests (e.g. safety,factual)"),
+    skip_health_check: bool = typer.Option(False, "--skip-health-check", help="Skip adapter connectivity check before running"),
 ):
     """Run a test suite against an LLM and report results."""
     if not suite.exists():
@@ -38,12 +40,16 @@ def run(
         border_style="cyan"
     ))
 
+    tag_list = [t.strip() for t in tags.split(",")] if tags else None
+
     runner = Runner(
         suite_path=suite,
         model_override=model,
         output_path=output,
         verbose=verbose,
         fail_fast=fail_fast,
+        tags=tag_list,
+        skip_health_check=skip_health_check,
     )
 
     success = runner.run()
